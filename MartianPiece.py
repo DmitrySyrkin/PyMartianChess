@@ -3,18 +3,22 @@ import pygame
 PURPLE = (128,0,128)
 BANANA = (227,207,87)
 
+PAWN = 'Pawn'
+DRONE = 'Drone'
+QUEEN = 'Queen'
+
 class MartianPiece:
-    def __init__(self, screen, position, radius, isSelected = False, isCapturedByPlayer = None):
+    def __init__(self, screen, position, pieceType, isSelected = False, isCapturedByPlayer = None):
         self._bounds = None        
         self._screen = screen
-        self._radius = radius
+        self._pieceType = pieceType
         self._isSelected = isSelected              
         self._isCapturedByPlayer = isCapturedByPlayer
         self._position = position
 
     def draw(self):
         if self._isCapturedByPlayer == None:          
-          self._bounds = pygame.draw.circle(self._screen, self.color, self.center, self._radius)
+          self._bounds = pygame.draw.circle(self._screen, self.color, self.center, self.radius)
 
     def collidepoint(self, point):
         if self._isCapturedByPlayer != None \
@@ -48,8 +52,10 @@ class MartianPiece:
         return BANANA if self.isSelected else PURPLE    
 
     @property
-    def pieceType(self):
-        return 'Pawn' if self._radius == 10 else ('Rook' if self._radius == 15 else 'Queen')
+    def radius(self):
+        return 10 if self._pieceType == PAWN  \
+             else (15 if self._pieceType == DRONE \
+                else ( 20 if self._pieceType == QUEEN else None))
 
     @property
     def row(self):
@@ -62,3 +68,7 @@ class MartianPiece:
     @property
     def center(self):
         return self.column * 60 + 30, self.row * 60 + 30
+
+    @property
+    def pieceType(self):
+        return self._pieceType

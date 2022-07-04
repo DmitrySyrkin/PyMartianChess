@@ -2,8 +2,8 @@ import pygame
 import sys
 from MartianBoard import MartianBoard
 
-from MartianField import MartianField
-from MartianPiece import MartianPiece
+import MartianField
+from MartianPiece import MartianPiece, PAWN, DRONE, QUEEN
 from MoveValidator import MoveValidator
 
 WIDTH = 640
@@ -32,15 +32,15 @@ class MartianChess(object):
   def init_position(self):
       self.draw_board()
       for pos in [(0,0), (0,1), (1,0), (3,7), (2,7), (3,6)]:
-        piece = MartianPiece(screen, pos, 20)
+        piece = MartianPiece(screen, pos, QUEEN)
         piece.draw()
         self.pieces.append(piece)
       for pos in [(0,2), (1,1), (2,0), (2,6),(1,7),(3,5)]:
-        piece = MartianPiece(screen, pos, 15)
+        piece = MartianPiece(screen, pos, DRONE)
         piece.draw()
         self.pieces.append(piece)
       for pos in  [(1,2), (2,1), (2,2), (1,6),(2,5),(1,5)]:
-        piece = MartianPiece(screen, pos, 10)
+        piece = MartianPiece(screen, pos, PAWN)
         piece.draw()
         self.pieces.append(piece)      
       pygame.display.update()
