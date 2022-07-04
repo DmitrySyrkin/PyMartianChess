@@ -17,16 +17,24 @@ class MartianPiece:
           self._bounds = pygame.draw.circle(self._screen, self.color, self._center, self._radius)
 
     def collidepoint(self, point):
-        return self._bounds != None and self._bounds.collidepoint(point)
+        if self._isCapturedByPlayer != None \
+           or self._bounds == None:
+           return False
+
+        if self._bounds.collidepoint(point):
+            return True
+        
+        rect = pygame.rect.Rect(self._center[0] - 30, self._center[1] - 30, 60, 60)
+        return rect.collidepoint(point)
 
     def select(self, isSelected):
         self._isSelected = isSelected
  
-    def move(self, x, y):
-      self._center = (x, y) 
+    def move(self, column, row):
+      self._center = (column * 60 + 30, row * 60 + 30) 
 
     def capture(self, currentPlayer):
-        self._isCapturedByPlayer = currentPlayer
+        self._isCapturedByPlayer = currentPlayer       
 
     def belongsToPlayer(self, currentPlayer: int):
         row = (self._center[1] - 30) / 60
@@ -34,7 +42,7 @@ class MartianPiece:
 
     @property
     def isSelected(self):
-        return self._isSelected == True 
+        return self._isCapturedByPlayer == None and self._isSelected == True 
 
     @property
     def color(self):

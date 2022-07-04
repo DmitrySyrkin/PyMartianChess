@@ -1,6 +1,8 @@
 import pygame
 import sys
+from MartianBoard import MartianBoard
 
+from MartianField import MartianField
 from MartianPiece import MartianPiece
 from MoveValidator import MoveValidator
 
@@ -10,41 +12,22 @@ HEIGHT = 640
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Martian chess v 0.0.1")
-font = pygame.font.Font(None, 48)
+
 validator = MoveValidator()
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 PINK = (255,192,203)
 GREEN = (0, 255, 0)
-PALEGREEN3 = (124,205,124)
-PALEGREEN4 = (84,139,84)
-PALETURQUOISE3 = (150,205,205)
-PALETURQUOISE4 = (102,139,139)
+
 
 class MartianChess(object):
-  fields : list[pygame.Rect] = []
-
+  board : MartianBoard = None
   pieces : list[MartianPiece] = []
   currentPlayer = 0
   
   def draw_board(self):
-    screen.fill(BLACK)
-  
-    label = font.render('Player: ' + ('GRAY' if self.currentPlayer == 0 else 'GREEN'), True, WHITE)
-    screen.blit(label, (360, 20))
-  
-    self.fields.clear()
-    for row in range(0,8):
-      for col in range(0,4):
-        if row > 3:
-          color = PALETURQUOISE3 if (row+col) % 2 == 0 else PALETURQUOISE4
-        else:
-          color = PALEGREEN3 if (row+col) % 2 == 0 else PALEGREEN4
-        field = pygame.draw.rect(screen, color, pygame.Rect(col*60, row*60, 60, 60))
-        self.fields.append(field)
-    pygame.display.flip()
+     self.board = MartianBoard(screen)
+     self.board.draw(self.currentPlayer)
   
   def init_position(self):
       self.draw_board()
@@ -86,7 +69,7 @@ class MartianChess(object):
                break
             
             clickedField = None
-            for field in self.fields:
+            for field in self.board.fields:
               if field.collidepoint(pygame.mouse.get_pos()):
                  clickedField = field
                  break
@@ -121,7 +104,7 @@ class MartianChess(object):
                 and pieceOnClickedField == None \
                 and validator.IsValidMove(selectedPiece, clickedField, self.pieces):
                   selectedPiece.select(False)
-                  selectedPiece.move(clickedField.centerx, clickedField.centery)
+                  selectedPiece.move(clickedField.column, clickedField.row)
                   self.currentPlayer = 1 - self.currentPlayer         
                   self.update_position()
 
@@ -132,7 +115,7 @@ class MartianChess(object):
                 and not pieceOnClickedField.belongsToPlayer(self.currentPlayer) \
                 and validator.IsValidMove(selectedPiece, clickedField, self.pieces):
                   selectedPiece.select(False)
-                  selectedPiece.move(clickedField.centerx, clickedField.centery)
+                  selectedPiece.move(clickedField.column, clickedField.row)
                   pieceOnClickedField.capture(self.currentPlayer)
                   self.currentPlayer = 1 - self.currentPlayer         
                   self.update_position()
