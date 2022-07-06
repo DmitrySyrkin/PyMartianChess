@@ -72,3 +72,13 @@ class MartianPiece:
     @property
     def pieceType(self):
         return self._pieceType
+
+    @property
+    def isCapturedByPlayer(self):
+        return self._isCapturedByPlayer
+
+    @property
+    def points(self):
+        return 1 if self._pieceType == PAWN  \
+             else (2 if self._pieceType == DRONE \
+                else ( 3 if self._pieceType == QUEEN else None))

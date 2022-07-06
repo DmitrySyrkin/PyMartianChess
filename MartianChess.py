@@ -27,7 +27,7 @@ class MartianChess(object):
   
   def draw_board(self):
      self.board = MartianBoard(screen)
-     self.board.draw(self.currentPlayer)
+     self.board.draw(self.currentPlayer, self.pieces)
   
   def init_position(self):
       self.draw_board()
@@ -42,7 +42,7 @@ class MartianChess(object):
       for pos in  [(1,2), (2,1), (2,2), (1,6),(2,5),(1,5)]:
         piece = MartianPiece(screen, pos, PAWN)
         piece.draw()
-        self.pieces.append(piece)      
+        self.pieces.append(piece)
       pygame.display.update()
   
   def update_position(self):      
