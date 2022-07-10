@@ -36,7 +36,6 @@ class MartianChess(object):
         piece = MartianPiece(screen, pos, QUEEN)
         piece.draw()
         self.pieces.append(piece)
-      '''
       for pos in [(0,2), (1,1), (2,0), (2,6),(1,7),(3,5)]:
         piece = MartianPiece(screen, pos, DRONE)
         piece.draw()
@@ -45,7 +44,6 @@ class MartianChess(object):
         piece = MartianPiece(screen, pos, PAWN)
         piece.draw()
         self.pieces.append(piece)
-      '''
       pygame.display.update()
   
   def update_position(self):      
@@ -76,7 +74,7 @@ class MartianChess(object):
 
           elif self.endOfGame:
             pass
-           
+
           elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             
             selectedPiece = None
