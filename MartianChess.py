@@ -24,10 +24,11 @@ class MartianChess(object):
   board : MartianBoard = None
   pieces : list[MartianPiece] = []
   currentPlayer = 0
+  endOfGame = False
   
   def draw_board(self):
      self.board = MartianBoard(screen)
-     self.board.draw(self.currentPlayer, self.pieces)
+     self.board.draw(self.currentPlayer, self.pieces, self.endOfGame)
   
   def init_position(self):
       self.draw_board()
@@ -35,6 +36,7 @@ class MartianChess(object):
         piece = MartianPiece(screen, pos, QUEEN)
         piece.draw()
         self.pieces.append(piece)
+      '''
       for pos in [(0,2), (1,1), (2,0), (2,6),(1,7),(3,5)]:
         piece = MartianPiece(screen, pos, DRONE)
         piece.draw()
@@ -43,6 +45,7 @@ class MartianChess(object):
         piece = MartianPiece(screen, pos, PAWN)
         piece.draw()
         self.pieces.append(piece)
+      '''
       pygame.display.update()
   
   def update_position(self):      
@@ -50,7 +53,18 @@ class MartianChess(object):
       for piece in self.pieces:
         piece.draw()
       pygame.display.update()
-      
+
+  def checkEndOfGame(self):
+    playerWithNoPieces = None
+    for player in range(0,2):
+      playerWithNoPieces = player
+      for piece in self.pieces:
+        if piece.belongsToPlayer(player):
+          playerWithNoPieces = None
+          break        
+      if playerWithNoPieces != None:
+        self.endOfGame = True    
+
   def Run(self):
     self.init_position()
   
@@ -59,7 +73,10 @@ class MartianChess(object):
           if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()     
-               
+
+          elif self.endOfGame:
+            pass
+           
           elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             
             selectedPiece = None
@@ -105,7 +122,8 @@ class MartianChess(object):
                 and validator.IsValidMove(selectedPiece, clickedField, self.pieces):
                   selectedPiece.select(False)
                   selectedPiece.move(clickedField.column, clickedField.row)
-                  self.currentPlayer = 1 - self.currentPlayer         
+                  self.currentPlayer = 1 - self.currentPlayer
+                  self.checkEndOfGame()       
                   self.update_position()
 
             # capture piece
@@ -118,7 +136,8 @@ class MartianChess(object):
                   selectedPiece.move(clickedField.column, clickedField.row)
                   pieceOnClickedField.capture(self.currentPlayer)
                   self.currentPlayer = 1 - self.currentPlayer         
-                  self.update_position()
+                  self.checkEndOfGame()
+                  self.update_position()            
 
 chess = MartianChess()
 chess.Run()

@@ -41,6 +41,8 @@ class MartianPiece:
         self._isCapturedByPlayer = currentPlayer       
 
     def belongsToPlayer(self, currentPlayer: int):
+        if self.isCapturedByPlayer != None:
+            return False
         return self.row > 3 if currentPlayer == 0 else self.row < 4
 
     @property

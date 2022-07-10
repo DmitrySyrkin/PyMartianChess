@@ -11,16 +11,21 @@ class MartianBoard:
         self._fields : list[MartianField] = []
         self._font = pygame.font.Font(None, 48)
 
-    def draw(self, currentPlayer, pieces: list[MartianPiece]):
+    def draw(self, currentPlayer, pieces: list[MartianPiece], endOfGame: bool):
       self._screen.fill(BLACK)
   
-      label = self._font.render('Player: ' + ('GRAY' if currentPlayer == 0 else 'GREEN'), True, WHITE)
-      self._screen.blit(label, (360, 20))
+      if not endOfGame:
+        label = self._font.render('Player: ' + ('GRAY' if currentPlayer == 0 else 'GREEN'), True, WHITE)
+        self._screen.blit(label, (360, 20))
 
       score = ' ' + str(self.getScore(pieces, 0)) + ' : ' + str(self.getScore(pieces, 1)) + ' '
       scoreLabel = self._font.render(score, True, BLACK, WHITE)
       self._screen.blit(scoreLabel, (360, 80))
-  
+      
+      if endOfGame:
+        endOfGameLabel = self._font.render('GAME OVER', True, WHITE, BLACK)
+        self._screen.blit(endOfGameLabel, (360, 120))
+
       self.fields.clear()
       for row in range(0,8):
         for column in range(0,4):
